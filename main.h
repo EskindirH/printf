@@ -7,5 +7,8 @@
 #include <string.h>
 
 int _printf(const char *format, ...);
+int print_int(va_list arguments, char *buf, unsigned int ibuf);
+unsigned int handle_buf(char *buf, char c, unsigned int ibuf);
+int print_buf(char *buf, unsigned int nbuf);
 
 #endif

@@ -2,56 +2,50 @@
 /**
  * _printf - produces output according to a format.
  * @format: a character string.
- *
  * Return: number of characters printed.
  */
 int _printf(const char *format, ...)
 {
-	unsigned int char_len = 0, i = 0;
-	va_list arguments;
+	unsigned int char_len = 0, i = 0, ibuf = 0;
+	int (*func)(va_list, char *, unsigned int);
+	char *buffer;
+	va_list args;
 
-	if (!format || (format[i] == '%' && !format[i + 1]))
+	va_start(args, format), buffer = malloc(sizeof(char) * 1024);
+	if (!format || (format[i] == '%' && !format[i + 1]) || !buffer)
 		return (-1);
 	if (!format[i])
 		return (0);
-
-	va_start(arguments, format);
-
 	for (i = 0; format && format[i]; i++)
 	{
 		if (format[i] != '%')
 		{
-			write(1, format + i, 1);
-			char_len++;
+			if (format[i + 1] == '\0')
+			{
+				print_buf(buffer, ibuf), free(buffer), va_end(args);
+				return (-1);
+			}
+			else
+			{
+				func = print_func(format, i + 1);
+				if (func == NULL)
+				{
+					if (format[i + 1] == ' ' && !format[i + 2])
+						return (-1);
+					handle_buf(buffer, format[i], ibuf), char_len++, i--;
+				}
+				else
+				{
+					char_len += func(args, buffer, ibuf);
+					i += id_print_func(format, i + 1);
+				}
+			} i++;
 		}
 		else
-		{
-			if (format[i + 1] == '\0')
-				return (-1);
-			if (format[i + 1] == '%')
-			{
-				write(1, format + (i + 1), 1);
-				char_len++;
-			}
-			else if (format[i + 1] == 'c')
-			{
-				char ch = va_arg(arguments, int);
-
-				write(1, &ch, 1);
-				char_len++;
-			}
-			else if (format[i + 1] == 's')
-			{
-				char *str = va_arg(arguments, char*);
-				int str_len = strlen(str);
-
-				write(1, str, str_len);
-				char_len += str_len;
-			}
-		i++;
-		}
+			handle_buf(buffer, format[i], ibuf), char_len++;
+		for (ibuf = char_len; ibuf > 1024; ibuf -= 1024)
+			;
 	}
-	va_end(arguments);
+	print_buf(buffer, ibuf), free(buffer), va_end(args);
 	return (char_len);
 }
-

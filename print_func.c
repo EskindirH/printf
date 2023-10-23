@@ -2,7 +2,7 @@
 
 /**
  * print_func - Selects the correct function to perform the operation.
- * @c: argument identifier
+ * @g: argument identifier
  * @iarg: argument identifier index
  * Return: pointer to function.
  */
@@ -31,7 +31,10 @@ int (*print_func(const char *s, int iarg))(va_list, char *, unsigned int)
 		{" d", prt_srt_int}, {" u", print_unt},
 		{" o", print_oct}, {" x", print_hex},
 		{" X", print_upx}, {"R", print_rot},
-		{"+ d", prt_pls_int}, {NULL, NULL},
+		{"+ d", prt_pls_int}, {"#o", prt_num_oct},
+		{"#x", prt_num_hex}, {"#X", prt_num_upx},
+		{"S", print_usr}, {"o", print_oct},
+		{"X", print_upx}, {NULL, NULL},
 	};
 	int i = 0, j = 0, first_index;
 

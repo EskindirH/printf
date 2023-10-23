@@ -23,6 +23,8 @@ int id_print_func(const char *s, int iarg)
 		{"+x", print_hex}, {"+X", print_upx}, {" i", prt_srt_int},
 		{" d", prt_srt_int}, {" u", print_unt}, {" o", print_oct},
 		{" x", print_hex}, {" X", print_upx}, {"R", print_rot},
+		{"#o", prt_num_oct}, {"#x", prt_num_hex}, {"#X", prt_num_upx},
+		{"X", print_upx}, {"S", print_usr}, {"o", print_oct},
 		{NULL, NULL},
 	};
 	int i = 0, j = 0, first_index;
